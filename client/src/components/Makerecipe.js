@@ -12,7 +12,19 @@ function Makerecipe() {
     const handleChange = (e) => {
         setUserData({...userData, [e.target.id]: e.target.value})
     }
+    /*
+    const readNWrite = () => {
+        setEntry([entrylist])
+        entrylist.push(value)
+
+    }
+    const handleChange = () => {
+        setValue([value])
+        console.log(value)
+    }
+    */  
     const submitIngredient = (e) => {
+        e.preventDefault()
         console.log(ingredients)
         console.log("täällä pitäis tapahtua")
     }
