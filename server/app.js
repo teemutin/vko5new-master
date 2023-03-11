@@ -37,16 +37,19 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 
-app.get("/recipe/:food", async (req,res) => {
+app.get("/api/recipe/:food", async (req,res) => {
   try {
   console.log(req.params.food)
-  res.send(req.params.food)
+  //res.send(req.params.food)
   let recipe = await Recipe.findOne({name: req.params.food})
-  if (recipe = null) {
+  if (recipe == null) {
     console.log("No recipe found on this article")
-    res.send("No recipe found on this article")
+    res.json({Failure: "No recipe found on this article"})
     return
   }
+  console.log("läpi")
+  console.log(recipe)
+  res.json(recipe)
   //Recipe.findOne({})
   } catch(err) {
     console.log(err)
@@ -58,7 +61,7 @@ app.get("/recipe/:food", async (req,res) => {
 app.get("/hello", (req,res) => {
   try {
   console.log("päivää")
-  res.send("Päivää")
+  res.json({tervehdys: "Päivää"})
   } catch (err) {
     console.log(err)
     res.send(err)
@@ -70,13 +73,14 @@ app.get("/hello", (req,res) => {
 });
 */
 
-app.post("/recipe", async (req,res) => {
+app.post("/api/recipe", async (req,res) => {
   console.log(req.body)
 
   const recipe = new Recipe ({
     name: req.body.name,
     instructions: req.body.instructions,
-    ingredients: req.body.ingredients
+    ingredients: req.body.ingredients,
+    categories: req.body.categories
 })
   try {
     recipe.save()
