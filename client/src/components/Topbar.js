@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useState} from 'react'
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -35,7 +35,6 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   justifyContent: 'center',
 }));
 
-const changeLanguage = (lang) => {}
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
@@ -54,7 +53,18 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function SearchAppBar() {
+export default function SearchAppBar({recipeg}) {
+  const [search, setSearch] = useState({})
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      console.log(e.target.value)
+      fetch("/api/recipe/"+e.target.value)
+      .then(response => response.json())
+      .then(json => setSearch(json))
+
+    }
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -67,7 +77,8 @@ export default function SearchAppBar() {
           >
             Recipes
           </Typography>
-          <Search>
+          
+          <Search onKeyDown={handleSearch}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -76,9 +87,12 @@ export default function SearchAppBar() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
-          <Button id="fi" color="inherit" onClick={() => changeLanguage("fi")}>Search</Button>
+          
         </Toolbar>
       </AppBar>
     </Box>
   );
 }
+
+//<input type="string" id="search" onKeyDown={handleSearch}/>
+//<Button id="fi" color="inherit" onClick={() => changeLanguage("fi")}>Search</Button>
