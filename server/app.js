@@ -163,14 +163,14 @@ app.get("/api/images/:imageid", async (req,res) => {
     console.log(req.params.imageid)
     //res.send(req.params.food)
     let imgur = await Image.findById(req.params.imageid)
-    console.log("kuva: "+imgur)
+    //console.log("kuva: "+imgur)
     
     if(!imgur) {
       res.json({ei: "kuvaa"})
       return
     }
     
-    console.log(imgur)
+    //console.log(imgur)
     res.json(imgur)
   } catch(err) {
     console.log(err)

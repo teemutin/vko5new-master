@@ -3,13 +3,17 @@ import './App.css';
 import Topbar from './components/Topbar';
 import Makerecipe from './components/Makerecipe';
 import {useState} from 'react'
+import FileBase64 from "react-file-base64"
+let base64String = require("base-64")
 
 
 function App() {
   const [recipeb,setRecipeb] = useState()
   const [search, setSearch] = useState()
-  const [searchimg, setSearchimg] = useState(null)
-  const [image, setImage] = useState(null)
+  //const [searchimg, setSearchimg] = useState(null)
+  const [imagedata, setImagedata] = useState([])
+  //const [imagedata, setImagedata] = useState([])
+  const [base, setBase] = useState()
 
 
   const handleSearch = async (e) => {
@@ -25,8 +29,16 @@ function App() {
       data.images.map( async (image) => {
         let response2 = await fetch("/api/images/"+image._id)
         let data2 = await response2.json()
+        setImagedata(data2)
         console.log("looopissa:  "+image._id)
+        //const base64String = btoa(String.fromCharCode(...new Uint8Array(image.buffer)));
+        //setBase(base64String)
+        //console.log(base64String)
+        //data: Buffer,
       })
+      setImagedata(data2)
+      const base64String = btoa(String.fromCharCode(...new Uint8Array(data2.buffer.data)))
+      //const base64String = btoa(String.fromCharCode(...new Uint8Array()));
       //const response2 = await fetch("/api/images/"+data.images._id)
       //const data2 = await response2.json()
       //console.log("kuva ois tässä"+data2)
@@ -85,6 +97,8 @@ function App() {
         <h3>{category}</h3>
       ))}
       
+      <img src={`data:image/png;base64,${base64String}`} width="300"/>
+
       <Makerecipe/>
       
     </div>
@@ -92,4 +106,21 @@ function App() {
 }
 
 export default App;
+/*
+{imagedata.map((singleData) => {
+        const base64String = btoa(
+          //String.fromCharCode(...new Uint8Array(singleData.img.data.data))
+          String.fromCharCode(...new Uint8Array(singleData.buffer.data))
+        );
+        return <img src={`data:image/png;base64,${base64String}`} width="300"/>
+      })}
+*/
+
+
+//onDone={ this.getFiles.bind(this) }
 //<h2>{search.instructions}</h2>
+/*
+<FileBase64
+        multiple={ true }
+        onDone={({base64}) => setItem} ({}) />
+*/
