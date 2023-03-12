@@ -11,13 +11,32 @@ function App() {
   const [searchimg, setSearchimg] = useState(null)
   const [image, setImage] = useState(null)
 
+
   const handleSearch = async (e) => {
     if (e.key === "Enter") {
       console.log(e.target.value)
-      await fetch("/api/recipe/"+e.target.value)
+      const response1 = await fetch("/api/recipe/"+e.target.value)
+      const data = await response1.json()
+      console.log(data)
+      console.log("**************************handlesearch************************************")
+      console.log(data.images._id)
+      setSearch(data)
+      let data2 = []
+      data.images.map( async (image) => {
+        let response2 = await fetch("/api/images/"+image._id)
+        let data2 = await response2.json()
+        console.log("looopissa:  "+image._id)
+      })
+      //const response2 = await fetch("/api/images/"+data.images._id)
+      //const data2 = await response2.json()
+      //console.log("kuva ois tässä"+data2)
+      //console.log(data2.buffer)
+      //const response2 = 
+      /*
       .then(response => response.json())
       .then(json => setSearch(json))
       .then(console.log(search))
+      */
       //console.log(e.target.value)
       /*
       const response1 = await fetch("/api/recipe/"+e.target.value)

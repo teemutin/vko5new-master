@@ -178,6 +178,7 @@ function Makerecipe() {
       };
     //const sendpic = async (e) => {
     const sendpic = async (id) => {
+        //id.preventDefault
         console.log(file)
         //id = {id}
         console.log("onko tyhjä"+id)
@@ -212,7 +213,7 @@ function Makerecipe() {
             <label> Image
                 <input type="file" name="image" onChange= {saveFile}/>
             </label>
-            <input type="submit" id="submit" />
+            
 
         </form>
 
@@ -293,4 +294,6 @@ function Makerecipe() {
           onFileSelectError={({ error }) => alert(error)}
         />
 */
+
+//<input type="submit" id="submit" />
 export default Makerecipe

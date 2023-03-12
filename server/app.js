@@ -57,6 +57,7 @@ app.use('/users', usersRouter);
 
 app.get("/api/recipe/:food", async (req,res) => {
   try {
+    console.log("Nyt etitään safkaa")
   console.log(req.params.food)
   //res.send(req.params.food)
   let recipe = await Recipe.findOne({name: req.params.food})
@@ -121,12 +122,15 @@ app.post("/api/images", multer({storage: multer.memoryStorage()}).single("image"
     
 
     let ressu = await Recipe.findById(recipeid)
+    console.log(ressu)
     if(!ressu) {
       console.log("eri löyry")
     } else {
       console.log("löyty resepti: "+ressu)
-      ressu.images.push(image)
+      //ressu.images.push(image)
+      //ressu.save()
       console.log(ressu)
+
       res.json(image)
     }
   } catch (err) {
@@ -155,17 +159,22 @@ app.post("/api/images", multer({storage: multer.memoryStorage()}).single("image"
 
 app.get("/api/images/:imageid", async (req,res) => {
   try {
+    console.log("*********************etsitään kuvaa******************************")
     console.log(req.params.imageid)
     //res.send(req.params.food)
-    let imgur = await Recipe.findById(req.params.imageid)
+    let imgur = await Image.findById(req.params.imageid)
+    console.log("kuva: "+imgur)
+    
     if(!imgur) {
       res.json({ei: "kuvaa"})
+      return
     }
+    
     console.log(imgur)
     res.json(imgur)
   } catch(err) {
     console.log(err)
-    res.send(err)
+    res.json(err)
   }
 })
 
