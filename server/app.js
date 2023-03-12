@@ -134,7 +134,7 @@ app.post("/api/images", upload.single("image"), async (req, res) => {
       //ressu.save()
       console.log(ressu)
 
-      res.send(imname)
+      res.send(image)
     }
   } catch (err) {
     console.log(err)

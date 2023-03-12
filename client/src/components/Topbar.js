@@ -78,15 +78,6 @@ export default function SearchAppBar({recipeg}) {
             Recipes
           </Typography>
           
-          <Search onKeyDown={handleSearch}>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
           
         </Toolbar>
       </AppBar>
