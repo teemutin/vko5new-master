@@ -8,12 +8,29 @@ const mongoose = require("mongoose");
 const mongoDB = "mongodb://127.0.0.1:27017/testdb";
 //const mongoDB = "mongodb://localhost:27017/testdb";
 const Recipe = require("./models/Recipes");
+const Image = require("./models/Images")
 const jsonParser = bodyParser.json()
+const multer = require("multer")
+//const upload = multer({storage: multer.memoryStorage})
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+/*
+var storage = multer.diskStorage({
+  destination: (req, file, callBack) => {
+      callBack(null, './public/images/')     // './public/images/' directory name where save the file
+  },
+  filename: (req, file, callBack) => {
+      callBack(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+  }
+})
+var upload = multer({
+  storage: storage
+});
+*/
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -72,9 +89,56 @@ app.get("/hello", (req,res) => {
   res.send("Hello world toimiiko kukkuu :)");
 });
 */
-
-app.post("/api/recipe", async (req,res) => {
+/*
+app.post("/api/images", async (req,res) => {
   console.log(req.body)
+  res.json({juu: "ei"})
+})
+*/
+app.post("/api/images", multer({storage: multer.memoryStorage()}).single("image"), async (req, res) => {
+  console.log(req.file)
+  //console.log(req.body)
+  const imageName = req.file.originalname
+  //const description = req.body.description
+  const imageBuffer = req.file.buffer
+  const imageEncoding = req.file.encoding
+  const imageMimetype = req.file.mimetype
+  //buffer: "hei"
+  const image = new Image ({
+    name: imageName,
+    encoding: imageEncoding,
+    mimetype: imageMimetype,
+    buffer: imageBuffer
+  })
+  try {
+    image.save()
+    //res.json(recipe)
+    re
+  } catch (err) {
+    console.log(err)
+    res.send(err)
+  }
+
+
+
+  //console.log(description, imageName)
+  console.log({imageName, imageBuffer, imageEncoding, imageMimetype})
+  
+  /*
+  res.send({imageName, imageBuffer})
+  if (!req.file) {
+      console.log("No file upload");
+  } else {
+      console.log("filu tietoja")
+      console.log(req.file.filename)
+      console.log(req.file)
+      console.log(req.body)
+       
+  }
+  */
+});
+app.post("/api/recipe", async (req,res) => {
+  //console.log(req.body)
 
   const recipe = new Recipe ({
     name: req.body.name,
@@ -84,6 +148,7 @@ app.post("/api/recipe", async (req,res) => {
 })
   try {
     recipe.save()
+    console.log(recipe)
     res.json(recipe)
   } catch (err) {
     console.log(err)

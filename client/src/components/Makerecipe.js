@@ -1,4 +1,7 @@
 import {useEffect, useState} from 'react'
+import axios from 'axios';
+import FileUploader from './FileUploader';
+
 
 function Makerecipe() {
     const [userData,setUserData] = useState({})
@@ -6,9 +9,13 @@ function Makerecipe() {
     const [entrylist, setEntry] = useState([]);
     const [entrylist2, setEntry2] = useState([]);
     const [name, setName] = useState("")
+    const [file, setFile] = useState([]);
+    const [fileName, setFileName] = useState("");
     const [ingredients, setIngredients] = useState([])
     const [instructions, setInstructions] = useState([])
     const [category, setCategory] = useState([])
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [pic, setPic] = useState({})
 
     const handleChangeIngr = (e) => {
         setValue([value])
@@ -56,6 +63,20 @@ function Makerecipe() {
         console.log("täällä pitäis tapahtua")
 
     }
+    const submitForm = () => {
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("file", selectedFile);
+        /*
+        axios
+          .post(UPLOAD_URL, formData)
+          .then((res) => {
+            alert("File Upload success");
+          })
+          .catch((err) => alert("File Upload Error"));
+          */
+      };
+      
     
     const submitRecipe = () => {
         const recipe = {"name":name, "ingredients": entrylist, "instructions": entrylist2, "categories": category}
@@ -73,6 +94,7 @@ function Makerecipe() {
             .then(data => {
                 console.log(data)
                 console.log("recipe created")
+                alert("recipe created")
             })
         
        /*
@@ -115,8 +137,75 @@ function Makerecipe() {
             */
 
     }
+    
+        
+        /*
+        fetch("/api/images", {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(selectedFile),
+            mode: "cors"
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+        */
+    
+    const saveFile = (e) => {
+        setFile(e.target.files[0])
+        setFileName(e.target.files[0].name)
+        /*
+        }
+        else {
+        setFile(...file, e.target.files[0]);
+        }
+        */
+        /*
+        const updatedList = [...file];
+        updatedList.push(e.target.files[0]);
+        console.log(updatedList)
+        setFile(updatedList);
+        setFileName(e.target.files[0].name);
+        */
+      };
+    const sendpic = async (e) => {
+        console.log(file)
+        e.preventDefault()
+        const formData = new FormData();
+        /*
+        file.forEach(fil => {
+            console.log(fil)
+            formData.append("image", fil);
+            formData.append("fileName", fil);
+        })*/
+        formData.append("image", file);
+        formData.append("fileName", fileName);
+        console.log(formData)
+        try {
+            const res = await axios.post(
+                "/api/images",
+                formData,
+                { headers: {'Content-Type': 'multipart/form-data'}}
+            );
+            console.log(res.data)
+            console.log(res);
+          } catch (ex) {
+            console.log(ex);
+          }
+        
+    }
   return (
     <div className='Recipe'>
+        <form onSubmit={sendpic}>
+            <label> Image
+                <input type="file" name="image" onChange= {saveFile}/>
+            </label>
+            <input type="submit" id="submit" />
+
+        </form>
 
     <h1>Make a new recipe</h1>
         <form onSubmit={nameChange} onChange={handleChangen} className="App">
@@ -146,10 +235,13 @@ function Makerecipe() {
             <label htmlFor="vip"><input id="ovo" name="ovo" type="checkbox" onChange={(e) => addCategory("Ovo")}/><span>ovo</span></label>
             <label htmlFor="vip"><input id="vegan" name="vegan" type="checkbox" onChange={(e) => addCategory("Vegan")}/><span>Vegan</span></label>
         </form>
+        
+        
         <button onClick={submitRecipe}>Submit recipe</button>
     </div>
   )
 }
+// <FileUploader/>
 //            <label htmlFor="vip"><input id="vip" name="vip" type="checkbox" onChange={(e) => setVip(e.currentTarget.checked)} value={vip} checked={vip} /><span>Very important poem</span></label>
 
 /*
@@ -176,6 +268,20 @@ function Makerecipe() {
             </label>
         </form>
 */
+/*
+            <label> Image name
+            <input
+                type="text"
+                value={filename}
+                onChange={(e) => setfileName(e.target.value)}
+                />
+            </label>
+*/
 
-
+/*
+<FileUploader
+          onFileSelectSuccess={(file) => setSelectedFile(file)}
+          onFileSelectError={({ error }) => alert(error)}
+        />
+*/
 export default Makerecipe
