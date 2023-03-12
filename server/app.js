@@ -11,8 +11,9 @@ const Recipe = require("./models/Recipes");
 const Image = require("./models/Images")
 const jsonParser = bodyParser.json()
 const multer = require("multer")
+const fs = require('fs')
 let recipeid = ""
-//const upload = multer({storage: multer.memoryStorage})
+const upload = multer({ dest: 'images/' })
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -97,9 +98,11 @@ app.post("/api/images", async (req,res) => {
   res.json({juu: "ei"})
 })
 */
-app.post("/api/images", multer({storage: multer.memoryStorage()}).single("image"), async (req, res) => {
-  console.log("Tästä alkaa filu")
+app.post("/api/images", upload.single("image"), async (req, res) => {
+  console.log("Tästä alkaa filu*******************************************************")
   console.log(recipeid)
+  const imname = req.file.filename
+  console.log(imname)
   //console.log("ja id: "+req.id)
   //console.log("ja id: "+req.file.id)
   //console.log(req.body)
@@ -131,7 +134,7 @@ app.post("/api/images", multer({storage: multer.memoryStorage()}).single("image"
       //ressu.save()
       console.log(ressu)
 
-      res.json(image)
+      res.send(imname)
     }
   } catch (err) {
     console.log(err)
@@ -163,6 +166,9 @@ app.get("/api/images/:imageid", async (req,res) => {
     console.log(req.params.imageid)
     //res.send(req.params.food)
     let imgur = await Image.findById(req.params.imageid)
+    const imageName = req.params.imageName
+    const readStream = fs.createReadStream(`images/${imageName}`)
+    readStream.pipe(res)
     //console.log("kuva: "+imgur)
     
     if(!imgur) {
@@ -170,7 +176,7 @@ app.get("/api/images/:imageid", async (req,res) => {
       return
     }
     
-    //console.log(imgur)
+    console.log(imgur)
     res.json(imgur)
   } catch(err) {
     console.log(err)
@@ -200,7 +206,7 @@ app.post("/api/recipe", async (req,res) => {
    
 
 })
-
+//app.post("/api/images", multer({storage: multer.memoryStorage()}).single("image"), async (req, res) => {
 //setting cors options, so we can connect to server from client on dev env
 if (process.env.NODE_ENV === "development") {
     var corsOptions = {

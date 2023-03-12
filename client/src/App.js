@@ -11,6 +11,7 @@ function App() {
   const [recipeb,setRecipeb] = useState()
   const [search, setSearch] = useState()
   //const [searchimg, setSearchimg] = useState(null)
+  const [imname, setImname] = useState("")
   const [imagedata, setImagedata] = useState([])
   //const [imagedata, setImagedata] = useState([])
   const [base, setBase] = useState()
@@ -23,6 +24,10 @@ function App() {
       const data = await response1.json()
       console.log(data)
       console.log("**************************handlesearch************************************")
+      if(typeof data.images === "undefined") {
+        console.log("No image")
+        return
+      }
       console.log(data.images._id)
       setSearch(data)
       let data2 = []
@@ -95,9 +100,10 @@ function App() {
       <h2>{search ? "Categories" : ""}</h2>
       {search?.categories?.map((category) => (
         <h3>{category}</h3>
-      ))}
+      ))}¨
       
-      <img src={`data:image/png;base64,${base64String}`} width="300"/>
+      
+      
 
       <Makerecipe/>
       
@@ -106,6 +112,7 @@ function App() {
 }
 
 export default App;
+//{search && <img src={image}/>}
 /*
 {imagedata.map((singleData) => {
         const base64String = btoa(
@@ -116,7 +123,7 @@ export default App;
       })}
 */
 
-
+//<img src={`data:image/png;base64,${base64String}`} width="300"/>
 //onDone={ this.getFiles.bind(this) }
 //<h2>{search.instructions}</h2>
 /*

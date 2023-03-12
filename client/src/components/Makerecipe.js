@@ -200,8 +200,10 @@ function Makerecipe() {
                 formData,
                 { headers: {'Content-Type': 'multipart/form-data'}}
             );
-            console.log(res.data)
-            console.log(res);
+            //console.log(res.data)
+            console.log("TULOSTUS***********************")
+            console.log(res.data);
+
           } catch (ex) {
             console.log(ex);
           }
@@ -209,13 +211,7 @@ function Makerecipe() {
     }
   return (
     <div className='Recipe'>
-        <form onSubmit={sendpic}>
-            <label> Image
-                <input type="file" name="image" onChange= {saveFile}/>
-            </label>
-            
-
-        </form>
+        
 
     <h1>Make a new recipe</h1>
         <form onSubmit={nameChange} onChange={handleChangen} className="App">
@@ -245,7 +241,13 @@ function Makerecipe() {
             <label htmlFor="vip"><input id="ovo" name="ovo" type="checkbox" onChange={(e) => addCategory("Ovo")}/><span>ovo</span></label>
             <label htmlFor="vip"><input id="vegan" name="vegan" type="checkbox" onChange={(e) => addCategory("Vegan")}/><span>Vegan</span></label>
         </form>
-        
+        <form onSubmit={sendpic}>
+            <label> Image
+                <input type="file" name="image" onChange= {saveFile}/>
+            </label>
+            
+
+        </form>
         
         <button onClick={submitRecipe}>Submit recipe</button>
     </div>
