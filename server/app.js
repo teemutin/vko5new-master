@@ -11,6 +11,7 @@ const Recipe = require("./models/Recipes");
 const Image = require("./models/Images")
 const jsonParser = bodyParser.json()
 const multer = require("multer")
+let recipeid = ""
 //const upload = multer({storage: multer.memoryStorage})
 
 var indexRouter = require('./routes/index');
@@ -96,7 +97,10 @@ app.post("/api/images", async (req,res) => {
 })
 */
 app.post("/api/images", multer({storage: multer.memoryStorage()}).single("image"), async (req, res) => {
-  console.log(req.file)
+  console.log("Tästä alkaa filu")
+  console.log(recipeid)
+  //console.log("ja id: "+req.id)
+  //console.log("ja id: "+req.file.id)
   //console.log(req.body)
   const imageName = req.file.originalname
   //const description = req.body.description
@@ -111,9 +115,20 @@ app.post("/api/images", multer({storage: multer.memoryStorage()}).single("image"
     buffer: imageBuffer
   })
   try {
+
     image.save()
-    //res.json(recipe)
-    re
+    console.log()
+    
+
+    let ressu = await Recipe.findById(recipeid)
+    if(!ressu) {
+      console.log("eri löyry")
+    } else {
+      console.log("löyty resepti: "+ressu)
+      ressu.images.push(image)
+      console.log(ressu)
+      res.json(image)
+    }
   } catch (err) {
     console.log(err)
     res.send(err)
@@ -137,6 +152,23 @@ app.post("/api/images", multer({storage: multer.memoryStorage()}).single("image"
   }
   */
 });
+
+app.get("/api/images/:imageid", async (req,res) => {
+  try {
+    console.log(req.params.imageid)
+    //res.send(req.params.food)
+    let imgur = await Recipe.findById(req.params.imageid)
+    if(!imgur) {
+      res.json({ei: "kuvaa"})
+    }
+    console.log(imgur)
+    res.json(imgur)
+  } catch(err) {
+    console.log(err)
+    res.send(err)
+  }
+})
+
 app.post("/api/recipe", async (req,res) => {
   //console.log(req.body)
 
@@ -149,6 +181,8 @@ app.post("/api/recipe", async (req,res) => {
   try {
     recipe.save()
     console.log(recipe)
+    recipeid=recipe._id
+    console.log("ja recipeid on:"+recipeid)
     res.json(recipe)
   } catch (err) {
     console.log(err)

@@ -9,7 +9,7 @@ function Makerecipe() {
     const [entrylist, setEntry] = useState([]);
     const [entrylist2, setEntry2] = useState([]);
     const [name, setName] = useState("")
-    const [file, setFile] = useState([]);
+    const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState("");
     const [ingredients, setIngredients] = useState([])
     const [instructions, setInstructions] = useState([])
@@ -95,6 +95,11 @@ function Makerecipe() {
                 console.log(data)
                 console.log("recipe created")
                 alert("recipe created")
+                if(file !== null) {
+                    console.log("löytyy kuva")
+                    console.log(data._id)
+                    sendpic(data._id)
+                }
             })
         
        /*
@@ -171,9 +176,12 @@ function Makerecipe() {
         setFileName(e.target.files[0].name);
         */
       };
-    const sendpic = async (e) => {
+    //const sendpic = async (e) => {
+    const sendpic = async (id) => {
         console.log(file)
-        e.preventDefault()
+        //id = {id}
+        console.log("onko tyhjä"+id)
+        //e.preventDefault()
         const formData = new FormData();
         /*
         file.forEach(fil => {
@@ -183,6 +191,7 @@ function Makerecipe() {
         })*/
         formData.append("image", file);
         formData.append("fileName", fileName);
+        formData.append("id", id)
         console.log(formData)
         try {
             const res = await axios.post(

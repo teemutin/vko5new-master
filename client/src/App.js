@@ -4,17 +4,45 @@ import Topbar from './components/Topbar';
 import Makerecipe from './components/Makerecipe';
 import {useState} from 'react'
 
+
 function App() {
   const [recipeb,setRecipeb] = useState()
-  const [search, setSearch] = useState(null)
+  const [search, setSearch] = useState()
+  const [searchimg, setSearchimg] = useState(null)
+  const [image, setImage] = useState(null)
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     if (e.key === "Enter") {
       console.log(e.target.value)
+      await fetch("/api/recipe/"+e.target.value)
+      .then(response => response.json())
+      .then(json => setSearch(json))
+      .then(console.log(search))
+      //console.log(e.target.value)
+      /*
+      const response1 = await fetch("/api/recipe/"+e.target.value)
+      const data1 = await response1.json()
+      */
+     /*
       fetch("/api/recipe/"+e.target.value)
       .then(response => response.json())
       .then(json => setSearch(json))
-      console.log(search)
+      */
+      //.then(console.log(search))
+      /*
+      .then(fetch("/api/images/"+search._id))
+      .then(response => response.json())
+      .then(json => setImage(json))
+      */
+    
+      
+      //console.log("nimi:"+search?.name)
+      //console.log("tässä id: "+search?._id)
+      /*
+      await fetch("/api/images/"+search._id)
+      .then(response => response.json())
+      .then(json => setImage(json))
+      */
 
     }
   }
